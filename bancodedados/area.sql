@@ -1,0 +1,4 @@
+vCREATE TABLE areas (
+    id_area INT AUTO_INCREMENT PRIMARY KEY,
+    nome_area VARCHAR(100) NOT NULL
+);
