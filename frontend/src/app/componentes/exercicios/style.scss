@@ -1,0 +1,64 @@
+.container-exercicio{
+    background-color: #fff;
+    border-radius: 15px;
+    border: 1px solid   #ccc;
+    margin-left: 2vh;
+    margin-bottom: 2rem;
+
+
+    .container-descricao-exercicio{
+        color: #000;
+        margin-left: 2rem;
+        margin-top: 2rem;
+    }
+
+   .container-responder{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        
+
+
+        button{
+            background-color: #fff;
+            border: 1px solid #FF6200;
+            color: #FF6200;
+            align-items: flex-end;
+            font-size: 16px;
+            height: 5vh;
+            width: 8vw;
+            border-radius: 5px;
+            margin: 3vh;
+        }
+
+        .feedback{
+            color: #000;
+            padding: 1rem;
+        }
+   }
+
+   
+    
+
+    
+
+    .container-respostas-exercicio{
+        display: flex;
+        margin-left: 2vh;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center; 
+        margin-left: 2rem;
+        margin-top: 2rem;
+
+        .resposta-opcao{
+            color: #000;
+            input{
+                margin-right: 1rem;
+            }
+        }
+    }
+
+
+    
+}

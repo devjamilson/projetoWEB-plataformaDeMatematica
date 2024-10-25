@@ -1,0 +1,25 @@
+.user {
+    top: 0;
+    left: 0;
+    width: 25%;
+    background-color: #fff;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    border-radius: 15px;
+    border: 1px solid   #ccc;
+    margin-left: 2vh;
+    height: 5rem;
+    margin-right: 4vh;
+    color: #050505;
+
+    .user-image{
+        font-size: 40px;
+    }
+
+    .user-name h2{
+        margin-left: 1rem;
+    }
+    
+  }
+  

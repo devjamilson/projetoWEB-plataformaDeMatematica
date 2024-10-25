@@ -2,5 +2,48 @@
     background-color: #FAFAFA;
     height: 100vh;
     width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
+.container-header-home{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: 15vh;
+}
+
+.container-exercicio-home {
+    max-height: 82vh;
+    width: 100%;
+    margin-top: 2vh;
+    display: flex;
+    flex-direction: row;
+    
+    .container-exercicios {
+      max-height: 100%; 
+      overflow-y: auto; 
+      width: 71%;
+      scrollbar-width: none; 
+      -ms-overflow-style: none;
+    }
+
+
+    .container-gabarito{
+        background-color: #fff;
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+        border-radius: 15px;
+        border: 1px solid   #ccc;
+        height: 20rem;
+        color: #050505;
+        margin-left: 2rem;
+        width: 25%;
+    }
+
+  }
+  
+  
