@@ -16,8 +16,17 @@ interface ExerciciosProps {
   onResposta: (resposta: string, index: number) => void; // Adicione aqui
 }
 
-
-export default function Exercicios({ descricao, a, b, c, d, e, certa, index }: ExerciciosProps) {
+export default function Exercicios({
+  descricao,
+  a,
+  b,
+  c,
+  d,
+  e,
+  certa,
+  index,
+  onResposta, // Recebe a função onResposta como props
+}: ExerciciosProps) {
   const { setResposta } = useRespostas();
   const [respostaSelecionada, setRespostaSelecionada] = useState<string | null>(null);
   const [feedback, setFeedback] = useState('');
@@ -27,7 +36,13 @@ export default function Exercicios({ descricao, a, b, c, d, e, certa, index }: E
     if (respostaSelecionada) {
       setResposta(index, respostaSelecionada);
       setConfirmada(true); // Define que a resposta foi confirmada
-      setFeedback(respostaSelecionada === certa ? 'Correto!' : 'Incorreto. Tente novamente.');
+
+      // Verifica se a resposta está correta e atualiza o feedback
+      const feedbackMsg = respostaSelecionada === certa ? 'Correto!' : 'Incorreto. Tente novamente.';
+      setFeedback(feedbackMsg);
+
+      // Atualiza o desempenho ao confirmar a resposta
+      onResposta(respostaSelecionada, index); // Chama a função para atualizar o desempenho
     }
   };
 

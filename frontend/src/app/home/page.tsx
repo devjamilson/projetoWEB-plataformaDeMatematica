@@ -8,7 +8,6 @@ import Exercicios from '../componentes/exercicios';
 import Gabarito from '../componentes/gabarito';
 import axios from 'axios';
 
-
 export default function Home() {
   const [exercicios, setExercicios] = useState([]);
   const [respostasCorretas, setRespostasCorretas] = useState<string[]>([]);
@@ -22,7 +21,7 @@ export default function Home() {
         setExercicios(exerciciosData);
 
         // Extraímos as respostas corretas
-        setRespostasCorretas(exerciciosData.map((exercicio) =>  exercicio[exercicio.certa]));
+        setRespostasCorretas(exerciciosData.map((exercicio) => exercicio[exercicio.certa]));
       } catch (error) {
         console.error('Erro ao buscar os exercícios:', error);
       }
@@ -35,11 +34,14 @@ export default function Home() {
     const updatedRespostas = [...respostasUsuario];
     updatedRespostas[index] = resposta;
     setRespostasUsuario(updatedRespostas);
+    
+    // Atualiza o desempenho cada vez que o usuário responde
+    calcularDesempenho(updatedRespostas);
   };
 
-  const calcularDesempenho = async () => {
+  const calcularDesempenho = async (respostasUsuarioAtualizadas: string[]) => {
     // Calcular acertos e erros
-    const qtd_acertos = respostasUsuario.filter((resposta, index) => resposta === respostasCorretas[index]).length;
+    const qtd_acertos = respostasUsuarioAtualizadas.filter((resposta, index) => resposta === respostasCorretas[index]).length;
     const qtd_erros = exercicios.length - qtd_acertos; // Número total de questões menos os acertos
     
     console.log('Dados enviados:', { qtd_acertos, qtd_erros }); // Verifica os dados que serão enviados
@@ -54,14 +56,13 @@ export default function Home() {
       console.error('Erro ao calcular desempenho:', error);
     }
   };
-  
 
   return (
     <RespostasProvider respostasCorretas={respostasCorretas}> 
       <div className='home-page'>
         <div className='container-header-home'>
-          <Reader/>
-          <User/>
+          <Reader />
+          <User />
         </div>
 
         <div className='container-exercicio-home'>
@@ -88,7 +89,7 @@ export default function Home() {
 
           <div className='container-gabarito'>
             <Gabarito />
-           {/*  <button onClick={calcularDesempenho}>Registrar Desempenho</button> Botão para registrar desempenho */}
+            {/* Removido o botão para registrar desempenho */}
           </div>
         </div>
       </div>
