@@ -2,21 +2,23 @@
 
 .gabarito {
     padding: 20px;
-  
+
     h2 {
       margin-bottom: 10px;
     }
-  
+
     .gabarito-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr); // 5 colunas
       grid-template-rows: repeat(2, 1fr);   // 2 linhas
       gap: 10px;
+      justify-items: center;
+      align-items: center;
     }
-  
+
     .gabarito-item {
-      width: 50px;
-      height: 50px;
+      width: 45px;
+      height: 45px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -24,7 +26,15 @@
       border-radius: 50%; // Circulo
       font-size: 1.2rem;
       color: #333;
-      border: 1px solid #ccc;
+      border: 1px solid transparent; // Bordas padrão
+      transition: border-color 0.3s ease; // Transição suave
+
+      &.border-correct {
+          border-color: green; // Cor para resposta correta
+      }
+      
+      &.border-incorrect {
+          border-color: red; // Cor para resposta incorreta
+      }
     }
-  }
-  
+}
