@@ -40,9 +40,9 @@ export default function Home() {
   };
 
   const calcularDesempenho = async (respostasUsuarioAtualizadas: string[]) => {
-    // Calcular acertos e erros
-    const qtd_acertos = respostasUsuarioAtualizadas.filter((resposta, index) => resposta === respostasCorretas[index]).length;
-    const qtd_erros = exercicios.length - qtd_acertos; // Número total de questões menos os acertos
+    // Contabilizar acertos e erros considerando apenas as respostas respondidas
+    const qtd_acertos = respostasUsuarioAtualizadas.filter((resposta, index) => resposta && resposta === respostasCorretas[index]).length;
+    const qtd_erros = respostasUsuarioAtualizadas.filter((resposta, index) => resposta && resposta !== respostasCorretas[index]).length;
     
     console.log('Dados enviados:', { qtd_acertos, qtd_erros }); // Verifica os dados que serão enviados
   
@@ -56,6 +56,7 @@ export default function Home() {
       console.error('Erro ao calcular desempenho:', error);
     }
   };
+  
 
   return (
     <RespostasProvider respostasCorretas={respostasCorretas}> 
