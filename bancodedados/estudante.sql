@@ -4,5 +4,5 @@ CREATE TABLE estudante (
     email VARCHAR(100) NOT NULL,
     passaword VARCHAR(100) NOT NULL,
     id_desem INT,  
-    FOREIGN KEY (id_desem) REFERENCES desempenho(id_desem)
+    FOREIGN KEY (id_desem) REFERENCES desempenho (id_desem)
 );

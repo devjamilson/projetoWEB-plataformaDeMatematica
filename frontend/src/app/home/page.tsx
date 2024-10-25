@@ -1,129 +1,70 @@
+// src/app/home/page.tsx
+'use client';
+
 import './style.scss';
 import Header from '../componentes/header';
 import { RespostasProvider } from '../context/RespostasContext';
 import User from '../componentes/user';
 import Exercicios from '../componentes/exercicios';
-
 import Gabarito from '../componentes/gabarito';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
-  return (
-    <RespostasProvider> 
-        <div className='home-page'>
-              <div className='container-header-home'>
-                <Header />
-                <User />
-              </div>
+  const [exercicios, setExercicios] = useState([]);
+  const [respostasCorretas, setRespostasCorretas] = useState<string[]>([]);
 
-              <div className='container-exercicio-home'>
-                <div className='container-exercicios'>
-                  <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={0}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={1}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={2}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={3}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={4}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={5}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={6}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={7}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={8}
-                    />
-                    <Exercicios 
-                      descricao="Qual é o resultado de 5 + 3?"
-                      a="6"
-                      b="7"
-                      c="8"
-                      d="9"
-                      e="10"
-                      certa="8"
-                      index={9}
-                    />
-                </div>
-                <div className='container-gabarito'>
-                   <Gabarito></Gabarito>
-                </div>
-              </div>
-            </div>
+  useEffect(() => {
+    const fetchExercicios = async () => {
+      try {
+        const response = await axios.get('http://localhost:5500/api/exercicios');
+        const exerciciosData = response.data.slice(0, 10);
+        setExercicios(exerciciosData);
+
+        // Extraímos as respostas corretas
+        setRespostasCorretas(exerciciosData.map((exercicio) => exercicio[exercicio.certa]));
+      } catch (error) {
+        console.error('Erro ao buscar os exercícios:', error);
+      }
+    };
+
+    fetchExercicios();
+  }, []);
+
+  return (
+    <RespostasProvider respostasCorretas={respostasCorretas}> 
+      <div className='home-page'>
+        <div className='container-header-home'>
+          <Header />
+          <User />
+        </div>
+
+        <div className='container-exercicio-home'>
+          <div className='container-exercicios'>
+            {exercicios.map((exercicio, index) => {
+              const respostaCorreta = exercicio[exercicio.certa];
+
+              return (
+                <Exercicios 
+                  key={index}
+                  descricao={exercicio.descricao}
+                  a={exercicio.a}
+                  b={exercicio.b}
+                  c={exercicio.c}
+                  d={exercicio.d}
+                  e={exercicio.e}
+                  certa={respostaCorreta}
+                  index={index}
+                />
+              );
+            })}
+          </div>
+
+          <div className='container-gabarito'>
+            <Gabarito />
+          </div>
+        </div>
+      </div>
     </RespostasProvider>
-    
   );
 }
