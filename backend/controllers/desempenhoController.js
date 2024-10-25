@@ -1,37 +1,28 @@
 const Desempenho = require('../models/desempenho');
 
 const desempenhoController = {
-    getAllDesempenho: (req, res) => {
-        Desempenho.findAll((err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
+    getAllDesempenho: async (req, res) => {
+        try {
+            const results = await Desempenho.getAll();
             res.json(results);
-        });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     },
-    createDesempenho: (req, res) => {
-        Desempenho.create(req.body, (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.status(201).json({ id: results.insertId });
-        });
-    },
-    updateDesempenho: (req, res) => {
-        Desempenho.update(req.params.id, req.body, (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Desempenho atualizado com sucesso!' });
-        });
-    },
-    deleteDesempenho: (req, res) => {
-        Desempenho.delete(req.params.id, (err, results) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-            res.json({ message: 'Desempenho excluído com sucesso!' });
-        });
+    insertDesempenho: async (req, res) => {
+        const { qtd_acertos, qtd_erros, id_acertos, id_erros } = req.body;
+
+        // Validação básica dos dados
+        if (typeof qtd_acertos !== 'number' || typeof qtd_erros !== 'number' || typeof id_acertos !== 'number' || typeof id_erros !== 'number') {
+            return res.status(400).json({ error: 'Dados inválidos. Certifique-se de que todos os campos estão corretos.' });
+        }
+
+        try {
+            const result = await Desempenho.insertDesempenho(qtd_acertos, qtd_erros, id_acertos, id_erros);
+            res.status(201).json({ message: 'Desempenho inserido com sucesso!', id: result.insertId });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
     },
 };
 
