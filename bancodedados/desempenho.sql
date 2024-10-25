@@ -1,7 +1,7 @@
 CREATE TABLE desempenho (
     id_desem INT AUTO_INCREMENT PRIMARY KEY,
-    qtd_acertos VARCHAR(100),
-    qtd_erros VARCHAR(100),
+    qtd_acertos INT,
+    qtd_erros INT,
     id_acertos INT,  
     FOREIGN KEY (id_acertos) REFERENCES acertos(id_acertos),
     id_erros INT,  

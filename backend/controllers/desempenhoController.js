@@ -10,15 +10,15 @@ const desempenhoController = {
         }
     },
     insertDesempenho: async (req, res) => {
-        const { qtd_acertos, qtd_erros, id_acertos, id_erros } = req.body;
+        const { qtd_acertos, qtd_erros} = req.body;
 
         // Validação básica dos dados
-        if (typeof qtd_acertos !== 'number' || typeof qtd_erros !== 'number' || typeof id_acertos !== 'number' || typeof id_erros !== 'number') {
+        if (typeof qtd_acertos !== 'number' || typeof qtd_erros !== 'number' ) {
             return res.status(400).json({ error: 'Dados inválidos. Certifique-se de que todos os campos estão corretos.' });
         }
 
         try {
-            const result = await Desempenho.insertDesempenho(qtd_acertos, qtd_erros, id_acertos, id_erros);
+            const result = await Desempenho.insertDesempenho(qtd_acertos, qtd_erros);
             res.status(201).json({ message: 'Desempenho inserido com sucesso!', id: result.insertId });
         } catch (err) {
             res.status(500).json({ error: err.message });

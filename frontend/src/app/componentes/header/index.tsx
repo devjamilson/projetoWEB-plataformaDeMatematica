@@ -15,15 +15,20 @@ export default function Header() {
         const response = await fetch('http://localhost:5500/api/desempenho');
         const data = await response.json();
 
-        // Supondo que a resposta tenha as propriedades acertos e erros
-        const { acertos, erros } = data;
+        // Verifica se a resposta da API é bem-sucedida
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`);
+        }
 
-        setAcertosTotais(acertos);
-        setErrosTotais(erros);
+        // Supondo que a resposta tenha as propriedades acertos e erros
+        const { qtd_acertos, qtd_erros } = data;
+
+        setAcertosTotais(qtd_acertos);
+        setErrosTotais(qtd_erros);
 
         // Calcular a porcentagem de acertos
-        const total = acertos + erros;
-        const porcentagem = total > 0 ? ((acertos / total) * 100).toFixed(2) + '%' : '0%';
+        const total = qtd_acertos + qtd_erros;
+        const porcentagem = total > 0 ? ((qtd_acertos / total) * 100).toFixed(2) + '%' : '0%';
         setPorcentagemAcertos(porcentagem);
       } catch (error) {
         console.error('Erro ao buscar as métricas:', error);

@@ -1,4 +1,3 @@
-// src/app/home/page.tsx
 'use client';
 
 import './style.scss';
@@ -13,6 +12,7 @@ import { useEffect, useState } from 'react';
 export default function Home() {
   const [exercicios, setExercicios] = useState([]);
   const [respostasCorretas, setRespostasCorretas] = useState<string[]>([]);
+  const [respostasUsuario, setRespostasUsuario] = useState<string[]>([]); // Para armazenar as respostas do usuário
 
   useEffect(() => {
     const fetchExercicios = async () => {
@@ -22,7 +22,7 @@ export default function Home() {
         setExercicios(exerciciosData);
 
         // Extraímos as respostas corretas
-        setRespostasCorretas(exerciciosData.map((exercicio) => exercicio[exercicio.certa]));
+        setRespostasCorretas(exerciciosData.map((exercicio) =>  exercicio[exercicio.certa]));
       } catch (error) {
         console.error('Erro ao buscar os exercícios:', error);
       }
@@ -30,6 +30,31 @@ export default function Home() {
 
     fetchExercicios();
   }, []);
+
+  const handleResposta = (resposta: string, index: number) => {
+    const updatedRespostas = [...respostasUsuario];
+    updatedRespostas[index] = resposta;
+    setRespostasUsuario(updatedRespostas);
+  };
+
+  const calcularDesempenho = async () => {
+    // Calcular acertos e erros
+    const qtd_acertos = respostasUsuario.filter((resposta, index) => resposta === respostasCorretas[index]).length;
+    const qtd_erros = exercicios.length - qtd_acertos; // Número total de questões menos os acertos
+    
+    console.log('Dados enviados:', { qtd_acertos, qtd_erros }); // Verifica os dados que serão enviados
+  
+    try {
+      const response = await axios.post('http://localhost:5500/api/desempenho', {
+        qtd_acertos: Number(qtd_acertos),
+        qtd_erros: Number(qtd_erros),
+      });
+      console.log('Desempenho registrado com sucesso:', response.data);
+    } catch (error) {
+      console.error('Erro ao calcular desempenho:', error);
+    }
+  };
+  
 
   return (
     <RespostasProvider respostasCorretas={respostasCorretas}> 
@@ -55,6 +80,7 @@ export default function Home() {
                   e={exercicio.e}
                   certa={respostaCorreta}
                   index={index}
+                  onResposta={(respostaCorreta) => handleResposta(respostaCorreta, index)} // Passa a resposta do usuário
                 />
               );
             })}
@@ -62,6 +88,7 @@ export default function Home() {
 
           <div className='container-gabarito'>
             <Gabarito />
+            <button onClick={calcularDesempenho}>Registrar Desempenho</button> {/* Botão para registrar desempenho */}
           </div>
         </div>
       </div>
