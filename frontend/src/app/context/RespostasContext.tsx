@@ -10,7 +10,7 @@ interface RespostasContextType {
 
 const RespostasContext = createContext<RespostasContextType | undefined>(undefined);
 
-export const RespostasProvider = ({ children, respostasCorretas }: { children: ReactNode, respostasCorretas: string[] }) => {
+export  const RespostasProvider = ({ children, respostasCorretas }: { children: ReactNode, respostasCorretas: string[] }) => {
   const [respostas, setRespostas] = useState<(string | null)[]>(Array(10).fill(null));
 
   const setResposta = (index: number, resposta: string) => {

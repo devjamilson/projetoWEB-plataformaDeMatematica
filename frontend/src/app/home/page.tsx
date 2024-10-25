@@ -1,13 +1,13 @@
 'use client';
-
 import './style.scss';
-import Header from '../componentes/header';
+import { useEffect, useState } from 'react';
 import { RespostasProvider } from '../context/RespostasContext';
+import Reader from '../componentes/reader';
 import User from '../componentes/user';
 import Exercicios from '../componentes/exercicios';
 import Gabarito from '../componentes/gabarito';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+
 
 export default function Home() {
   const [exercicios, setExercicios] = useState([]);
@@ -60,8 +60,8 @@ export default function Home() {
     <RespostasProvider respostasCorretas={respostasCorretas}> 
       <div className='home-page'>
         <div className='container-header-home'>
-          <Header />
-          <User />
+          <Reader/>
+          <User/>
         </div>
 
         <div className='container-exercicio-home'>
@@ -88,7 +88,7 @@ export default function Home() {
 
           <div className='container-gabarito'>
             <Gabarito />
-            <button onClick={calcularDesempenho}>Registrar Desempenho</button> {/* Botão para registrar desempenho */}
+           {/*  <button onClick={calcularDesempenho}>Registrar Desempenho</button> Botão para registrar desempenho */}
           </div>
         </div>
       </div>

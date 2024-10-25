@@ -12,8 +12,10 @@ interface ExerciciosProps {
   d: string;
   e: string;
   certa: string;
-  index: number; // índice da questão
+  index: number;
+  onResposta: (resposta: string, index: number) => void; // Adicione aqui
 }
+
 
 export default function Exercicios({ descricao, a, b, c, d, e, certa, index }: ExerciciosProps) {
   const { setResposta } = useRespostas();
