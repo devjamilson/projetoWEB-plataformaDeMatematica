@@ -6,12 +6,16 @@ import { useRespostas } from '../../context/RespostasContext';
 export default function Gabarito() {
   const { respostas, respostasCorretas } = useRespostas();
 
+  // Função para atualizar a página
+  const handleRefresh = () => {
+    window.location.reload();
+  };
+
   return (
     <div className="gabarito">
       <h2>Gabarito</h2>
       <div className="gabarito-grid">
         {respostas.map((resposta, index) => {
-          // Verifique se a resposta do usuário está correta comparando com respostasCorretas
           const isCorrect = resposta === respostasCorretas[index];
           
           // Printar o valor de isCorrect para cada resposta
@@ -26,6 +30,9 @@ export default function Gabarito() {
           );
         })}
       </div>
+      <button className='atualizar-desempenho' onClick={handleRefresh}>
+        Atualizar desempenho
+      </button>
     </div>
   );
 }

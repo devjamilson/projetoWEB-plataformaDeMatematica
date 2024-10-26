@@ -16,6 +16,9 @@
       align-items: center;
     }
 
+
+
+
     .gabarito-item {
       width: 45px;
       height: 45px;
@@ -30,11 +33,26 @@
       transition: border-color 0.3s ease; // Transição suave
 
       &.border-correct {
-          border-color: green; // Cor para resposta correta
+          border-color: green; 
+          background-color: rgb(222, 255, 222);
       }
-      
+
       &.border-incorrect {
-          border-color: red; // Cor para resposta incorreta
+          border-color: red;
+          background-color: rgb(253, 220, 220);
       }
+    }
+
+
+    .atualizar-desempenho{
+      background-color: #FF6200;
+      border: 1px solid #FF6200;
+      color: #ffffff;
+      align-items: flex-end;
+      font-size: 16px;
+      height: 5vh;
+      width: 14vw;
+      border-radius: 5px;
+      margin-top:8vh;
     }
 }

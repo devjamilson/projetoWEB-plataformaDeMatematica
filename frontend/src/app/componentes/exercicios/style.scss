@@ -5,14 +5,14 @@
     margin-left: 2vh;
     margin-bottom: 2rem;
 
-
-
     &.border-correct {
-        border-color: green; // Cor para resposta correta
+        border-color: green; 
+        background-color: rgb(222, 255, 222);
     }
 
     &.border-incorrect {
-        border-color: red; // Cor para resposta incorreta
+        border-color: red;
+        background-color: rgb(253, 220, 220);
     }
 
 
@@ -41,10 +41,46 @@
             margin: 3vh;
         }
 
+
+
+        &.border-correct {
+            button{
+                background-color: #FF6200;
+                border: 1px solid #FF6200;
+                color: #ffffff;
+                align-items: flex-end;
+                font-size: 16px;
+                height: 5vh;
+                width: 8vw;
+                border-radius: 5px;
+                margin: 3vh;
+            }
+            
+        }
+
+        &.border-incorrect {
+            button{
+                background-color: #FF6200;
+                border: 1px solid #FF6200;
+                color: #ffffff;
+                align-items: flex-end;
+                font-size: 16px;
+                height: 5vh;
+                width: 8vw;
+                border-radius: 5px;
+                margin: 3vh;
+            }
+            
+        }
+
         .feedback{
             color: #000;
             padding: 1rem;
         }
+        
+        
+
+        
    }
 
    

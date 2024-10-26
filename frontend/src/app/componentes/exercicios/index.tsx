@@ -63,13 +63,13 @@ export default function Exercicios({
               value={resposta}
               checked={respostaSelecionada === resposta}
               onChange={() => setRespostaSelecionada(resposta)}
-              disabled={confirmada} // Desabilita o rádio após confirmação
+              disabled={confirmada} 
             />
             {resposta}
           </label>
         ))}
       </div>
-      <div className="container-responder">
+      <div className={`container-responder ${borderClass}`}>
         <div>
           {feedback && <p className="feedback">{feedback}</p>}
         </div>

@@ -17,7 +17,7 @@ export default function Home() {
     const fetchExercicios = async () => {
       try {
         const response = await axios.get('http://localhost:5500/api/exercicios');
-        const exerciciosData = response.data.slice(0, 10);
+        const exerciciosData = response.data.slice(10, 20);
         setExercicios(exerciciosData);
 
         // Extraímos as respostas corretas
@@ -62,8 +62,8 @@ export default function Home() {
     <RespostasProvider respostasCorretas={respostasCorretas}> 
       <div className='home-page'>
         <div className='container-header-home'>
-          <Reader />
-          <User />
+        <Reader /> 
+        <User />
         </div>
 
         <div className='container-exercicio-home'>

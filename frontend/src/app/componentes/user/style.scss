@@ -17,8 +17,20 @@
         font-size: 40px;
     }
 
+    .user-name{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 80%;
+
+        .logout-button{
+            margin-left: 0.6rem;
+            color: red;
+        }
+    }
+
     .user-name h2{
-        margin-left: 1rem;
+        margin-left: 0.6rem;
     }
     
   }
