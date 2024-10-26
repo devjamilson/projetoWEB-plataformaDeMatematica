@@ -1,3 +1,4 @@
+// src/componentes/reader.tsx
 'use client';
 import { useEffect, useState } from 'react';
 import { IoMdSearch } from "react-icons/io";
@@ -8,39 +9,40 @@ export default function Reader() {
   const [errosTotais, setErrosTotais] = useState(0);
   const [porcentagemAcertos, setPorcentagemAcertos] = useState('0%');
   
+  const fetchDesempenho = async () => {
+    try {
+      const response = await fetch('http://localhost:5500/api/desempenho');
+      const data = await response.json();
+
+      const totalAcertos = data.reduce((total, item) => total + item.qtd_acertos, 0);
+      const totalErros = data.reduce((total, item) => total + item.qtd_erros, 0);
+
+      setAcertosTotais(totalAcertos);
+      setErrosTotais(totalErros);
+
+      const total = totalAcertos + totalErros;
+      const porcentagem = total > 0 ? ((totalAcertos / total) * 100).toFixed(2) + '%' : '0%';
+      setPorcentagemAcertos(porcentagem);
+    } catch (error) {
+      console.error('Erro ao buscar as métricas:', error);
+    }
+  };
+
   useEffect(() => {
-    // Função para buscar as métricas da API
-    const fetchDesempenho = async () => {
-      try {
-        const response = await fetch('http://localhost:5500/api/desempenho');
-        const data = await response.json();
+    fetchDesempenho();
 
-        // Verifica se a resposta da API é bem-sucedida
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}: ${response.statusText}`);
-        }
-
-        console.log(data); // Adicione isso para ver a resposta da API
-
-        // Calcular os totais de acertos e erros
-        const totalAcertos = data.reduce((total, item) => total + item.qtd_acertos, 0);
-        const totalErros = data.reduce((total, item) => total + item.qtd_erros, 0);
-
-        setAcertosTotais(totalAcertos);
-        setErrosTotais(totalErros);
-
-        // Calcular a porcentagem de acertos
-        const total = totalAcertos + totalErros;
-        const porcentagem = total > 0 ? ((totalAcertos / total) * 100).toFixed(2) + '%' : '0%';
-        setPorcentagemAcertos(porcentagem);
-      } catch (error) {
-        console.error('Erro ao buscar as métricas:', error);
-      }
+    // Escuta o evento personalizado para atualizar os dados
+    const handleRefresh = () => {
+      fetchDesempenho();
     };
 
-    // Chamar a função de busca ao montar o componente
-    fetchDesempenho();
-  }, []); // O array vazio [] significa que isso roda apenas uma vez quando o componente é montado
+    window.addEventListener('readerRefresh', handleRefresh);
+
+    // Limpeza do evento ao desmontar o componente
+    return () => {
+      window.removeEventListener('readerRefresh', handleRefresh);
+    };
+  }, []);
 
   return (
     <header className="header">

@@ -1,14 +1,29 @@
-// src/app/page.tsx
+// src/componentes/gabarito.tsx
 'use client';
 import './style.scss';
 import { useRespostas } from '../../context/RespostasContext';
+import axios from 'axios';
 
 export default function Gabarito() {
   const { respostas, respostasCorretas } = useRespostas();
 
-  // Função para atualizar a página
-  const handleRefresh = () => {
-    window.location.reload();
+  const handleRefreshDesempenho = async () => {
+    try {
+      // Atualiza o desempenho na API
+      const qtd_acertos = respostas.filter((resposta, index) => resposta === respostasCorretas[index]).length;
+      const qtd_erros = respostas.filter((resposta, index) => resposta && resposta !== respostasCorretas[index]).length;
+
+      await axios.post('http://localhost:5500/api/desempenho', {
+        qtd_acertos,
+        qtd_erros,
+      });
+
+      // Força o re-fetch dos dados no componente Reader
+      const readerRefreshEvent = new Event('readerRefresh');
+      window.dispatchEvent(readerRefreshEvent);
+    } catch (error) {
+      console.error('Erro ao atualizar desempenho:', error);
+    }
   };
 
   return (
@@ -17,10 +32,6 @@ export default function Gabarito() {
       <div className="gabarito-grid">
         {respostas.map((resposta, index) => {
           const isCorrect = resposta === respostasCorretas[index];
-          
-          // Printar o valor de isCorrect para cada resposta
-          console.log(`Questão ${index + 1}:`, { resposta, correta: respostasCorretas[index], isCorrect });
-
           const borderClass = isCorrect ? 'border-correct' : resposta ? 'border-incorrect' : '';
 
           return (
@@ -30,7 +41,7 @@ export default function Gabarito() {
           );
         })}
       </div>
-      <button className='atualizar-desempenho' onClick={handleRefresh}>
+      <button className="atualizar-desempenho" onClick={handleRefreshDesempenho}>
         Atualizar desempenho
       </button>
     </div>
