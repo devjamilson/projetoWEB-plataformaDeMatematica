@@ -12,19 +12,20 @@ export default function Gabarito() {
       // Atualiza o desempenho na API
       const qtd_acertos = respostas.filter((resposta, index) => resposta === respostasCorretas[index]).length;
       const qtd_erros = respostas.filter((resposta, index) => resposta && resposta !== respostasCorretas[index]).length;
-
+  
       await axios.post('http://localhost:5500/api/desempenho', {
         qtd_acertos,
         qtd_erros,
       });
-
-      // Força o re-fetch dos dados no componente Reader
-      const readerRefreshEvent = new Event('readerRefresh');
-      window.dispatchEvent(readerRefreshEvent);
+  
+      // Força o reload da página
+      window.location.reload();
+      
     } catch (error) {
       console.error('Erro ao atualizar desempenho:', error);
     }
   };
+  
 
   return (
     <div className="gabarito">

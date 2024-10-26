@@ -1,3 +1,4 @@
+// src/pages/home.tsx
 'use client';
 import './style.scss';
 import { useEffect, useState } from 'react';
@@ -11,41 +12,42 @@ import axios from 'axios';
 export default function Home() {
   const [exercicios, setExercicios] = useState([]);
   const [respostasCorretas, setRespostasCorretas] = useState<string[]>([]);
-  const [respostasUsuario, setRespostasUsuario] = useState<string[]>([]); // Para armazenar as respostas do usuário
+  const [respostasUsuario, setRespostasUsuario] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchExercicios = async () => {
-      try {
-        const response = await axios.get('http://localhost:5500/api/exercicios');
-        const exerciciosData = response.data.slice(10, 20);
-        setExercicios(exerciciosData);
-
-        // Extraímos as respostas corretas
-        setRespostasCorretas(exerciciosData.map((exercicio) => exercicio[exercicio.certa]));
-      } catch (error) {
-        console.error('Erro ao buscar os exercícios:', error);
-      }
-    };
-
     fetchExercicios();
   }, []);
 
+  const fetchExercicios = async (searchTerm = '') => {
+    try {
+      console.log('Buscando exercícios com o termo:', searchTerm);
+      const response = await axios.get(`http://localhost:5500/api/exercicios/subarea${searchTerm ? `?subarea=${searchTerm}` : ''}`);
+      console.log('Dados recebidos da API:', response.data); // Log da resposta da API
+      setExercicios(response.data);
+  
+      // Extraímos as respostas corretas
+      setRespostasCorretas(response.data.map((exercicio) => exercicio[exercicio.certa]));
+    } catch (error) {
+      console.error('Erro ao buscar os exercícios:', error);
+    }
+  };
+
+  const handleSearch = (searchTerm: string) => {
+    // Faz o reload da página
+    fetchExercicios(searchTerm); // Chama fetchExercicios com o termo de pesquisa
+  };
+  
   const handleResposta = (resposta: string, index: number) => {
     const updatedRespostas = [...respostasUsuario];
     updatedRespostas[index] = resposta;
     setRespostasUsuario(updatedRespostas);
-    
-    // Atualiza o desempenho cada vez que o usuário responde
     calcularDesempenho(updatedRespostas);
   };
 
   const calcularDesempenho = async (respostasUsuarioAtualizadas: string[]) => {
-    // Contabilizar acertos e erros considerando apenas as respostas respondidas
     const qtd_acertos = respostasUsuarioAtualizadas.filter((resposta, index) => resposta && resposta === respostasCorretas[index]).length;
     const qtd_erros = respostasUsuarioAtualizadas.filter((resposta, index) => resposta && resposta !== respostasCorretas[index]).length;
     
-    console.log('Dados enviados:', { qtd_acertos, qtd_erros }); // Verifica os dados que serão enviados
-  
     try {
       const response = await axios.post('http://localhost:5500/api/desempenho', {
         qtd_acertos: Number(qtd_acertos),
@@ -56,14 +58,13 @@ export default function Home() {
       console.error('Erro ao calcular desempenho:', error);
     }
   };
-  
 
   return (
     <RespostasProvider respostasCorretas={respostasCorretas}> 
       <div className='home-page'>
         <div className='container-header-home'>
-        <Reader /> 
-        <User />
+          <Reader onSearch={handleSearch} /> {/* Passa setRespostasUsuario para Reader */}
+          <User />
         </div>
 
         <div className='container-exercicio-home'>
@@ -82,7 +83,7 @@ export default function Home() {
                   e={exercicio.e}
                   certa={respostaCorreta}
                   index={index}
-                  onResposta={(respostaCorreta) => handleResposta(respostaCorreta, index)} // Passa a resposta do usuário
+                  onResposta={(respostaCorreta) => handleResposta(respostaCorreta, index)} 
                 />
               );
             })}
@@ -90,7 +91,6 @@ export default function Home() {
 
           <div className='container-gabarito'>
             <Gabarito />
-            {/* Removido o botão para registrar desempenho */}
           </div>
         </div>
       </div>

@@ -4,11 +4,16 @@ import { useEffect, useState } from 'react';
 import { IoMdSearch } from "react-icons/io";
 import './style.scss';
 
-export default function Reader() {
+interface ReaderProps {
+  onSearch: (searchTerm: string) => void; // Define a prop onSearch
+}
+
+export default function Reader({ onSearch}: ReaderProps) {
   const [acertosTotais, setAcertosTotais] = useState(0);
   const [errosTotais, setErrosTotais] = useState(0);
   const [porcentagemAcertos, setPorcentagemAcertos] = useState('0%');
-  
+  const [searchTerm, setSearchTerm] = useState(''); // Adiciona um estado para o termo de pesquisa
+
   const fetchDesempenho = async () => {
     try {
       const response = await fetch('http://localhost:5500/api/desempenho');
@@ -31,18 +36,24 @@ export default function Reader() {
   useEffect(() => {
     fetchDesempenho();
 
-    // Escuta o evento personalizado para atualizar os dados
     const handleRefresh = () => {
       fetchDesempenho();
     };
 
     window.addEventListener('readerRefresh', handleRefresh);
 
-    // Limpeza do evento ao desmontar o componente
     return () => {
       window.removeEventListener('readerRefresh', handleRefresh);
     };
   }, []);
+
+
+
+  
+
+  const handleSearch = () => {
+    onSearch(searchTerm);
+  };
 
   return (
     <header className="header">
@@ -66,8 +77,10 @@ export default function Reader() {
           type="text"
           placeholder="Pesquisar..."
           className="search-input"
+          value={searchTerm} // Liga o input ao estado
+          onChange={(e) => setSearchTerm(e.target.value)} // Atualiza o estado com o valor do input
         />
-        <button className="search-btn"><IoMdSearch /></button>
+        <button className="search-btn" onClick={handleSearch}><IoMdSearch /></button> {/* Adiciona onClick ao botão */}
       </div>
     </header>
   );
